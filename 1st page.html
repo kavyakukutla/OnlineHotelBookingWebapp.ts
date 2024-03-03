@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>booking</title>
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    background-image: url('https://th.bing.com/th/id/R.f90991da71486001df697f56a2356181?rik=p%2faHMCE272KC3w&riu=http%3a%2f%2fwww.crescentcourt.com%2fwp-content%2fuploads%2f2018%2f03%2fsuitelife.jpg&ehk=ImIjCReyUybn3pQ%2fQDI0qnmjbUAJ3Efsvj1Eh8ibxPE%3d&risl=&pid=ImgRaw&r=0');
+    min-height: 100vh;
+background-size: cover; /* Cover the entire container with the background image */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; 
+    background-color: paleturquoise;
+    padding: 20px; 
+    max-width: 700px;
+    width: 100%;
+    box-sizing: border-box; 
+    margin: auto;
+   }
+
+.center-section {
+            position: relative;
+            background: rgba(255, 255, 255, 0.6); /* Semi-transparent white background */
+            padding: 20px;
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+            margin: auto;
+            border-radius: 10px; /* Rounded corners for a highlighted effect */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Drop shadow for depth */
+        }
+
+
+        .next-button {
+            margin-top: 10px;
+        }
+.next-right{
+      float: right ;
+      margin-top: 10px;
+}
+    </style>
+</head>
+<body>
+<div class="center-section"><br>
+    <b><label for="first-name">FIRST NAME:</label></b>
+    <input type="text" id="first-name" required>
+
+    <b><label for="last-name">LAST NAME:</label></b>
+    <input type="text" id="last-name" required>
+
+    <br><br>
+
+    <div>
+        <b><label for="date-of-birth">DATE OF BIRTH:</label></b>
+        <input type="date" id="date-of-birth" onchange="updateBannerDates()" required>
+    </div>
+
+     <h4>
+        <label for="GENDER">GENDER:</label>  
+        <select id="GENDER" name="GENDER" required>
+            <option value="   ">   </option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Others">Others</option>
+        </select>
+     </h4>
+
+    <b><label for="email-id">EMAIL ID:</label></b>
+    <input type="text" id="email-id" required>
+    <br><br>
+
+    <b><label for="address">ADDRESS:</label></b>
+    <input type="text" id="address" required>
+    <br><br>
+
+    <script>
+       populateCountryOptions();
+          function populateCountryOptions() {
+            var select = document.getElementById("COUNTRY");
+
+            fetch("https://restcountries.com/v2/all")
+              .then(response => response.json())
+              .then(data => {
+                data.forEach(country => {
+                  var option = document.createElement("option");
+                  option.text = country.name;
+                  option.setAttribute("data-calling-code", country.callingCodes[0]);
+                  option.setAttribute("data-country-code", country.alpha2Code);
+                  select.appendChild(option);
+                });
+              })
+              .catch(error => console.error(error));
+          }
+
+          function updateContactNumber() {
+            var countrySelect = document.getElementById("COUNTRY");
+            var contactNumberInput = document.getElementById("contact-number");
+            var countryCodeSpan = document.getElementById("country-code");
+            var selectedOption = countrySelect.options[countrySelect.selectedIndex];
+            var callingCode = selectedOption.getAttribute("data-calling-code");
+            var countryCode = selectedOption.getAttribute("data-country-code");
+            var maxLength = callingCode.length + 8; // Set maximum length of contact number
+            
+            contactNumberInput.value = "";
+            countryCodeSpan.textContent = "+" + callingCode;
+
+            contactNumberInput.maxLength = maxLength; // Set the maximum length dynamically
+          }
+
+          function nextPage() {
+            event.preventDefault();
+            window.location.href = "ochi.html";
+          }
+        </script>
+
+    <body onload="populateCountryOptions()">
+          <b><label for="COUNTRY">COUNTRY:</label></b>
+          <select id="COUNTRY" name="COUNTRY" onchange="updateContactNumber()" required></select>
+
+          <br><br>
+          
+          <b><label for="contact-number">CONTACT NO:</label></b>
+          <span id="country-code"></span>
+          <input type="text" id="contact-number" required>
+
+
+    <br>
+<br><b><label for="children">CHILDREN:</label></b>
+    <select id="children" name="children" required>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    <option value="6">6</option>
+    </select>
+<b><label for="adult">Adult:</label></b>
+    <select id="adult" name="adult" required>
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+    </select>
+<br><br>
+<b>WHICH KIND OF ROOM IS NEEDED?</b><br><br>
+<form>
+    <label>
+        <b><input type="radio" name="room_type" value="standard room" onclick="updateRoomDetails()"> Standard Room </b>
+    </label>
+    <label>
+        <b><input type="radio" name="room_type" value="deluxe room" onclick="updateRoomDetails()"> Deluxe Room</b>
+    </label>
+    <label>
+        <b><input type="radio" name="room_type" value="executive suite" onclick="updateRoomDetails()"> Executive Suite</b>
+    </label>
+</form>
+
+<div id="room-image-container"></div>
+  <div id="room-details"></div>
+
+  <script>
+
+    var roomTypeRadios = document.getElementsByName("room_type");
+    var roomDetailsContainer = document.getElementById("room-details");
+    var roomImageContainer = document.getElementById("room-image-container");
+
+    function updateRoomDetails() {
+      roomDetailsContainer.innerHTML = "";
+      roomImageContainer.innerHTML = "";
+
+      var selectedRoomType;
+      for (var i = 0; i < roomTypeRadios.length; i++) {
+        if (roomTypeRadios[i].checked) {
+          selectedRoomType = roomTypeRadios[i].value;
+          break;
+        }
+      }
+ if (selectedRoomType) {
+      var roomImage = document.createElement("img");
+      roomImage.src = getRoomImageURL(selectedRoomType);
+      roomImage.style.width = "500px";
+      roomImage.style.height = "400px";
+      roomImageContainer.appendChild(roomImage);
+
+      var roomHeading = document.createElement("h2");
+      roomHeading.textContent = selectedRoomType.charAt(0).toUpperCase() + selectedRoomType.slice(1);
+      roomDetailsContainer.appendChild(roomHeading);
+
+      var facilityList = document.createElement("ul");
+      facilityList.classList.add("facility-list");
+
+      var facilities = getRoomFacilities(selectedRoomType);
+      for (var j = 0; j < facilities.length; j++) {
+        var facilityItem = document.createElement("li");
+        facilityItem.textContent = facilities[j];
+        facilityList.appendChild(facilityItem);
+      }
+
+      roomDetailsContainer.appendChild(facilityList);
+    }else {
+    // Display a message to select a room type
+    var emptyImageMessage = document.createElement("p");
+    emptyImageMessage.textContent = "Select your room type to view images and details.";
+    roomImageContainer.appendChild(emptyImageMessage);
+    imageElement.src = "https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?cs=srgb&dl=blue-exotic-hotel-189296.jpg&fm=jpg";
+}
+}
+
+    document.querySelectorAll('input[name="room_type"]').forEach(function (radio) {
+      radio.addEventListener('change', updateRoomDetails);
+    });
+
+    function getRoomImageURL(roomType) {
+      switch (roomType) {
+        case "standard room":
+          return "https://th.bing.com/th/id/R.dd62e7c247dbeb7f14c62e4cc113f228?rik=Q7eSbXL7hDuwvw&riu=http%3a%2f%2fcache.marriott.com%2fmarriottassets%2fmarriott%2fDALBR%2fdalbr-suite-0022-hor-clsc.jpg%3finterpolation%3dprogressive-bilinear%26&ehk=PNo%2bjM6ZW9mBjOW52vtgw%2bD%2f2Zq9xEoeABbfjTvFitQ%3d&risl=&pid=ImgRaw&r=0";
+        case "deluxe room":
+          return "https://i.dailymail.co.uk/i/pix/2017/12/05/09/4700561D00000578-5146823-image-a-47_1512466988155.jpg";
+        case "executive suite":
+          return "https://www.thechatwalny.com/wp-content/uploads/sites/17/2018/03/The-Chatwal-Luxury-Collection-Hotel-New-York-Chatwal-Suite-Living-Room-Area.jpg?x85658";
+        default:
+          return "";
+      }
+    }
+
+    function getRoomFacilities(roomType) {
+      console.log("Selected Room Type:", roomType);
+
+      switch (roomType) {
+        case "standard room":
+          return [
+            "PRICE - 2500/-",
+            "Swimming Pool",
+            "Pet-friendly",
+            "Restaurant",
+            "Bar/Lounge",
+            "Free wifi",
+            "No Smoking",
+            "Limit: 5-6 members"
+          ];
+        case "deluxe room":
+          return [
+            "PRICE - 3500/-",
+            "Swimming Pool",
+            "Pet-friendly",
+            "Restaurant",
+            "Bar/Lounge",
+            "Free wifi",
+            "Free TV",
+            "Smoking Allowed"
+          ];
+        case "executive suite":
+          return [
+            "PRICE - 6000/-",
+            "Swimming Pool",
+            "Restaurant",
+            "Bar/Lounge",
+            "Spa",
+            "GYM available",
+            "Free wifi",
+            "Separate Smoking zone",
+            "Free Breakfast"
+          ];
+        default:
+          return [];
+      }
+    }
+
+
+    // Call updateRoomDetails when the page loads
+    updateRoomDetails();
+    
+        function validateAndNext() {
+            var requiredFields = document.querySelectorAll('[required]');
+            var isValid = true;
+
+            requiredFields.forEach(function(field) {
+                if (!field.value) {
+                    isValid = false;
+                }
+            });
+
+            if (isValid) {
+                // Proceed to the next page
+                window.location.href = "2nd page.html";
+            } else {
+                alert("Please fill in all required fields.");
+            }
+        }
+function previousPage() {
+            window.location.href = "hotel.html";
+        }
+    </script> 
+<b>HOW MANY ROOMS ARE REQUIRED FOR STAYING?</b><br><br>
+<b><label for="StandardRoom">StandardRoom:</label></b>
+<select id="StandardRoom" name="StandardRoom" onclick="updateRoomDetails()" required>
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+</select>
+<b><label for="DeluxeRoom">DeluxeRoom:</label></b>
+<select id="DeluxeRoom" name="DeluxeRoom" required>
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+</select>
+<b><label for="ExecutiveRoom">ExecutiveRoom:</label></b>
+<select id="ExecutiveRoom" name="ExecutiveRoom" required>
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+</select>
+<br><br>
+<button class="next-button" onclick="previousPage()">Previous</button>
+    <button class="next-right" onclick="validateAndNext()">Next</button>
+</body>
+</html>

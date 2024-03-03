@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Form</title>
+  <style>
+body{
+background-image: url('https://cdn.firespring.com/images/6ff831f1-aed1-40a6-a8e6-1b4795ad32c6.jpg');
+}
+
+    .form-container {
+      width: 800px;
+      margin: 70px auto;
+      height: 500px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: aliceblue;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .payment-option {
+      margin-top: 10px;
+    }
+
+    .payment-option label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .payment-details {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .form-container img {
+      width: 50%;
+      height: 80%;
+      position: absolute;
+      top: 70px;
+      right: 0;
+      float: right;
+      display: block;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <div class="background-section">  
+      <div class="form-container">
+        <h2>Payment Options</h2>
+        <label for="paymentMethod">Select Payment Method:</label>
+        <div class="payment-option">
+          <select id="paymentMethod">
+            <option value="">Please select</option>
+            <option value="cash">Cash</option>
+            <option value="upi">UPI</option>
+            <option value="card">Card</option>
+          </select>
+        </div>
+        
+        <div id="cash" style="display: none;">
+          <!-- Cash payment details, if any -->
+        </div>
+        
+        <div id="upi" style="display: none;">
+          <label for="upiId">UPI ID:</label>
+          <input type="text" id="upiId" name="upiId" required>
+          <button type="button" onclick="makeUpiPayment()">Make Payment</button>
+        </div>
+        
+        <div id="card" style="display: none;">
+          <label for="cardNumber">Card Number:</label>
+          <input type="text" id="cardNumber" name="cardNumber" required><br><br>
+          <label for="expiryDate">Expiry Date:</label>
+          <input type="text" id="expiryDate" name="expiryDate" required><br><br>
+          <label for="amount">Amount:</label>
+          <input type="text" id="amount" name="amount" required>
+          <button type="button" onclick="makeCardPayment()">Make Payment</button>
+        </div>
+
+        <br><br>
+   <img src="https://i5.walmartimages.com/asr/99d96313-fa1a-4b49-879d-1ae408ee42a5_1.bb97e891aa794f40fd1179c681527159.jpeg" alt="Product Image">
+        <button onclick="validate()">Submit</button>
+     
+      </div>
+    </div>
+  </form>
+
+  <script>
+    document.getElementById("paymentMethod").addEventListener("change", function() {
+      var selectedMethod = this.value;
+      
+      // Hide all payment options
+      var options = document.querySelectorAll("#cash, #upi, #card");
+      options.forEach(function(option) {
+        option.style.display = "none";
+      });
+      
+      // Show selected payment option
+      var selectedOption = document.getElementById(selectedMethod);
+      if (selectedOption) {
+        selectedOption.style.display = "block";
+      }
+    });
+
+    function makeUpiPayment() {
+      var upiId = document.getElementById("upiId").value;
+      if (!upiId.trim()) {
+        alert("Please enter a UPI ID.");
+        return;
+      }
+      // Logic to process UPI payment
+      alert("UPI payment initiated for UPI ID: " + upiId);
+    }
+    
+    function makeCardPayment() {
+      var cardNumber = document.getElementById("cardNumber").value;
+      var expiryDate = document.getElementById("expiryDate").value;
+      var amount = document.getElementById("amount").value;
+      
+      if (!cardNumber.trim() || !expiryDate.trim() || !amount.trim()) {
+        alert("Please fill in all card details.");
+        return;
+      }
+      // Logic to process card payment
+      alert("Card payment initiated for amount: " + amount);
+    }
+    
+    function validate() {
+      var paymentMethod = document.getElementById("paymentMethod").value;
+      var isValid = true;
+
+      // Add logic here to validate based on the selected payment method
+      // Example: Ensure a UPI ID is provided for UPI payments
+
+      if (isValid) {
+        console.log("Successfully submitted.");
+        // Proceed with form submission or further processing
+      } else {
+        alert("Please ensure all required fields are filled out correctly.");
+      }
+    }
+  </script>
+</body>
+</html>
